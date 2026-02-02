@@ -1,4 +1,10 @@
 import streamlit as st
+from supabase import create_client
+url = st.secrets["SUPABASE_URL"]
+key = st.secrets["SUPABASE_KEY"]
+
+supabase = create_client(url, key)
+
 
 st.set_page_config(page_title="相性分析アプリ", layout="centered")
 st.title("💖 相性分析アプリ（15問・分析型）")
@@ -94,3 +100,14 @@ if st.button("相性を分析する"):
     st.subheader("📊 質問ごとの分析")
     for d in detail:
         st.write(d)
+
+st.divider()
+st.subheader("Supabase 接続テスト")
+
+if st.button("Supabaseにテスト保存"):
+    supabase.table("logs").insert({
+        "username": "test_user",
+        "content": "接続テスト"
+    }).execute()
+    st.success("Supabaseに保存できました！")
+
